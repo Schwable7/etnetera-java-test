@@ -1,13 +1,12 @@
 package com.etnetera.hr.controller;
 
+import com.etnetera.hr.service.JavaScriptFrameworkService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.etnetera.hr.data.JavaScriptFramework;
-import com.etnetera.hr.repository.JavaScriptFrameworkRepository;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -19,16 +18,31 @@ import java.util.Date;
 @RestController
 public class JavaScriptFrameworkController {
 
-	private final JavaScriptFrameworkRepository repository;
+	private final JavaScriptFrameworkService service;
 
 	@Autowired
-	public JavaScriptFrameworkController(JavaScriptFrameworkRepository repository) {
-		this.repository = repository;
+	public JavaScriptFrameworkController(JavaScriptFrameworkService service) {
+		this.service = service;
 	}
 
 	@GetMapping("/frameworks")
 	public Iterable<JavaScriptFramework> frameworks() {
-		return repository.findAll();
+		return service.getFrameworks();
+	}
+
+	@PostMapping("/frameworks")
+	public JavaScriptFramework createFramework(String name, String version, BigDecimal hypeLevel, Date deprecationDate) {
+		return service.createJavaScriptFramework(name, version, hypeLevel, deprecationDate);
+	}
+
+	@PutMapping("/frameworks/{name}")
+	public JavaScriptFramework updateFramework(@PathVariable String name, String version, BigDecimal hypeLevel, Date deprecationDate) {
+		return service.updateFramework(name, version, hypeLevel, deprecationDate);
+	}
+
+	@DeleteMapping("/frameworks/{name}")
+	public void deleteFramework(@PathVariable String name) {
+		service.deleteFramework(name);
 	}
 
 

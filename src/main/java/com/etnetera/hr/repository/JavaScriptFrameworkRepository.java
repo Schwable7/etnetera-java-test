@@ -11,5 +11,5 @@ import com.etnetera.hr.data.JavaScriptFramework;
  *
  */
 public interface JavaScriptFrameworkRepository extends CrudRepository<JavaScriptFramework, Long> {
-
+    JavaScriptFramework findJavaScriptFrameworkByName(String name);
 }
