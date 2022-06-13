@@ -1,11 +1,10 @@
 package com.etnetera.hr.data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Simple data entity describing basic properties of every JavaScript framework.
@@ -20,14 +19,15 @@ public class JavaScriptFramework {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false, length = 30, unique = true)
 	private String name;
 
-	@Column(name = "version")
-	private String version;
+	@Column(name = "versions")
+	@ElementCollection
+	private List<String> versions = new ArrayList<>();
 
 	@Column(name = "hype_level")
-	private long hypeLevel;
+	private BigDecimal hypeLevel;
 
 	@Column(name = "deprecation_date")
 	private Date deprecationDate;
@@ -55,19 +55,19 @@ public class JavaScriptFramework {
 		this.name = name;
 	}
 
-	public String getVersion() {
-		return version;
+	public List<String> getVersions() {
+		return versions;
 	}
 
-	public void setVersion(String version) {
-		this.version = version;
+	public void setVersions(List<String> versions) {
+		this.versions = versions;
 	}
 
-	public long getHypeLevel() {
+	public BigDecimal getHypeLevel() {
 		return hypeLevel;
 	}
 
-	public void setHypeLevel(long hypeLevel) {
+	public void setHypeLevel(BigDecimal hypeLevel) {
 		this.hypeLevel = hypeLevel;
 	}
 
@@ -84,10 +84,9 @@ public class JavaScriptFramework {
 		return "JavaScriptFramework{" +
 				"id=" + id +
 				", name='" + name + '\'' +
-				", version='" + version + '\'' +
+				", versions=" + versions +
 				", hypeLevel=" + hypeLevel +
 				", deprecationDate=" + deprecationDate +
 				'}';
 	}
-
 }
