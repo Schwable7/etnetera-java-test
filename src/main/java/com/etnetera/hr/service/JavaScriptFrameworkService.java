@@ -4,14 +4,9 @@ import com.etnetera.hr.data.JavaScriptFramework;
 import com.etnetera.hr.repository.JavaScriptFrameworkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class JavaScriptFrameworkService {
@@ -38,7 +33,7 @@ public class JavaScriptFrameworkService {
         framework.setHypeLevel(hypeLevel);
         framework.setDeprecationDate(deprecationDate);
         repository.save(framework);
-        System.out.println("Framework: " + framework.getName() + " with version: " + version + " was created");
+        System.out.printf("Framework: %s with version: %s was created%n", framework.getName(), version);
         return framework;
     }
 
@@ -46,7 +41,6 @@ public class JavaScriptFrameworkService {
         return repository.findAll();
     }
 
-    @Transactional
     public JavaScriptFramework updateFramework(String name, String version, BigDecimal hypeLevel, Date deprecationDate) {
         final JavaScriptFramework framework = repository.findJavaScriptFrameworkByName(name);
 
@@ -61,7 +55,10 @@ public class JavaScriptFrameworkService {
                 changes++;
             }
             if (version != null && !framework.getVersions().contains(version)) {
-                framework.getVersions().add(version);
+                final List<String> versions = framework.getVersions();
+                final List<String> updatetVersions = new ArrayList<>(versions);
+                updatetVersions.add(version);
+                framework.setVersions(updatetVersions);
                 changes++;
             }
             if (hypeLevel != null && !Objects.equals(hypeLevel, framework.getHypeLevel())) {

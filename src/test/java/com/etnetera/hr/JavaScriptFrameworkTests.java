@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -23,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 public class JavaScriptFrameworkTests {
 
     public static final String ANGULAR = "Angular";
@@ -51,9 +53,9 @@ public class JavaScriptFrameworkTests {
         assertThat(angular).isNotNull();
         assertThat(angular.getName()).isEqualTo(ANGULAR);
 
-        final JavaScriptFramework framework = javaScriptFrameworkService.updateFramework(ANGULAR, "1.0.1", BigDecimal.valueOf(6), null);
-        assertThat(angular.getVersions().size()).isNotEqualTo(framework.getVersions().size());
-        assertThat(angular.getHypeLevel()).isLessThan(framework.getHypeLevel());
+        javaScriptFrameworkService.updateFramework(ANGULAR, "1.0.1", BigDecimal.valueOf(6), null);
+        assertThat(angular.getVersions().size()).isGreaterThan(1);
+        assertThat(angular.getHypeLevel()).isGreaterThan(BigDecimal.valueOf(5));
 
     }
 
@@ -64,6 +66,7 @@ public class JavaScriptFrameworkTests {
 
         final Iterable<JavaScriptFramework> frameworks = javaScriptFrameworkService.getFrameworks();
         assertThat(frameworks).isNotNull();
+        assertThat(frameworks.iterator().hasNext()).isTrue();
     }
 
     @Test
